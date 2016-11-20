@@ -153,3 +153,100 @@ CREATE TABLE titles
 	description varchar(35) NOT NULL
 );
 GO
+
+
+PRINT '**********';
+PRINT '* A4 - Creating tables Primary Keys and Foreign Keys *';
+
+PRINT '* Add PK to customers *';
+
+ALTER TABLE customers
+ADD PRIMARY KEY (customer_id);
+GO
+
+
+PRINT '* Add PK to shippers *';
+
+ALTER TABLE shippers
+ADD PRIMARY KEY (shipper_id);
+GO
+
+PRINT '* Add PK to suppliers *';
+
+ALTER TABLE suppliers
+ADD PRIMARY KEY (supplier_id);
+GO
+
+PRINT '* Add PK to titles *';
+
+ALTER TABLE titles
+ADD PRIMARY KEY (title_id);
+GO
+
+PRINT '* Add FK to customers *';
+
+ALTER TABLE customers
+ADD CONSTRAINT fk_customers_titles
+FOREIGN KEY (title_id)
+REFERENCES titles
+(title_id);
+GO
+
+PRINT '* Add PK to orders *';
+
+ALTER TABLE orders
+ADD PRIMARY KEY (order_id);
+GO
+
+PRINT '* Add PK to products *';
+
+ALTER TABLE products
+ADD PRIMARY KEY (product_id);
+GO
+
+
+PRINT '* Add PK to order_details *';
+
+ALTER TABLE order_details
+ADD PRIMARY KEY (order_id, product_id);
+
+
+
+PRINT '* Add FK to orders *';
+
+ALTER TABLE orders
+ADD CONSTRAINT fk_orders_customer
+FOREIGN KEY (customer_id)
+REFERENCES customers
+(customer_id);
+GO
+
+PRINT '* Add FK to order_details *';
+
+ALTER TABLE order_details
+ADD CONSTRAINT fk_order_details_order
+FOREIGN KEY (order_id)
+references orders
+(order_id);
+GO
+
+PRINT '* Add FK to order_details *';
+
+ALTER TABLE order_details
+ADD CONSTRAINT fk_order_details_product
+FOREIGN KEY (product_id)
+references products
+(product_id);
+GO
+
+
+PRINT '* Add FK to products *';
+
+ALTER TABLE products
+ADD CONSTRAINT fk_products_supplier
+FOREIGN KEY (supplier_id)
+REFERENCES suppliers
+(supplier_id);
+GO
+
+
