@@ -209,8 +209,6 @@ PRINT '* Add PK to order_details *';
 ALTER TABLE order_details
 ADD PRIMARY KEY (order_id, product_id);
 
-
-
 PRINT '* Add FK to orders *';
 
 ALTER TABLE orders
@@ -218,6 +216,15 @@ ADD CONSTRAINT fk_orders_customer
 FOREIGN KEY (customer_id)
 REFERENCES customers
 (customer_id);
+GO
+
+PRINT '* Add FK to orders *';
+
+ALTER TABLE orders
+ADD CONSTRAINT fk_orders_shipper
+FOREIGN KEY (shipper_id)
+REFERENCES shippers
+(shipper_id);
 GO
 
 PRINT '* Add FK to order_details *';
