@@ -153,3 +153,149 @@ CREATE TABLE titles
 	description varchar(35) NOT NULL
 );
 GO
+
+PRINT '**********';
+PRINT '* A4 - Creating tables Primary Keys and Foreign Keys *';
+
+PRINT '* Add PK to customers *';
+
+ALTER TABLE customers
+ADD PRIMARY KEY (customer_id);
+GO
+
+
+PRINT '* Add PK to shippers *';
+
+ALTER TABLE shippers
+ADD PRIMARY KEY (shipper_id);
+GO
+
+PRINT '* Add PK to suppliers *';
+
+ALTER TABLE suppliers
+ADD PRIMARY KEY (supplier_id);
+GO
+
+PRINT '* Add PK to titles *';
+
+ALTER TABLE titles
+ADD PRIMARY KEY (title_id);
+GO
+
+PRINT '* Add FK to customers *';
+
+ALTER TABLE customers
+ADD CONSTRAINT fk_customers_titles
+FOREIGN KEY (title_id)
+REFERENCES titles
+(title_id);
+GO
+
+PRINT '* Add PK to orders *';
+
+ALTER TABLE orders
+ADD PRIMARY KEY (order_id);
+GO
+
+PRINT '* Add PK to products *';
+
+ALTER TABLE products
+ADD PRIMARY KEY (product_id);
+GO
+
+
+PRINT '* Add PK to order_details *';
+
+ALTER TABLE order_details
+ADD PRIMARY KEY (order_id, product_id);
+
+PRINT '* Add FK to orders *';
+
+ALTER TABLE orders
+ADD CONSTRAINT fk_orders_customer
+FOREIGN KEY (customer_id)
+REFERENCES customers
+(customer_id);
+GO
+
+PRINT '* Add FK to orders *';
+
+ALTER TABLE orders
+ADD CONSTRAINT fk_orders_shipper
+FOREIGN KEY (shipper_id)
+REFERENCES shippers
+(shipper_id);
+GO
+
+PRINT '* Add FK to order_details *';
+
+ALTER TABLE order_details
+ADD CONSTRAINT fk_order_details_order
+FOREIGN KEY (order_id)
+references orders
+(order_id);
+GO
+
+PRINT '* Add FK to order_details *';
+
+ALTER TABLE order_details
+ADD CONSTRAINT fk_order_details_product
+FOREIGN KEY (product_id)
+references products
+(product_id);
+GO
+
+
+PRINT '* Add FK to products *';
+
+ALTER TABLE products
+ADD CONSTRAINT fk_products_supplier
+FOREIGN KEY (supplier_id)
+REFERENCES suppliers
+(supplier_id);
+GO
+
+PRINT '**********';
+PRINT '* A5 - Adding constraints to tables *';
+
+PRINT '* default country for customer table *';
+
+ALTER TABLE customers
+ADD CONSTRAINT default_customers_country
+DEFAULT('Canada') FOR country;
+Go
+
+PRINT '* default date for orders table *';
+
+ALTER TABLE orders
+ADD CONSTRAINT default_order_date
+DEFAULT DATEADD(DAY, 10, GETDATE()) FOR required_date;
+GO
+
+PRINT '* check constraint for quantity on order_details table *';
+
+ALTER TABLE order_details
+ADD CONSTRAINT check__order_details_quantity
+CHECK(quantity >= 1);
+GO
+
+PRINT '* check constraint for reorder level on products table *';
+
+ALTER TABLE products
+ADD CONSTRAINT check_products_reorder
+CHECK (reorder_level >= 1);
+GO
+
+PRINT '* check constraint for quantity on products table *';
+
+ALTER TABLE products
+ADD CONSTRAINT check_products_quantity
+CHECK (quantity_in_stock < 150);
+GO
+
+PRINT '* default province for suppliers table *';
+
+ALTER TABLE suppliers
+ADD CONSTRAINT default_suppliers_province
+DEFAULT ('BC') for province;
+GO
