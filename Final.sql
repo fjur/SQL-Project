@@ -47,6 +47,7 @@ CREATE TYPE cusidt FROM char(5) NOT NULL;
 GO
 
 PRINT '* orderidt User Data Type created for orders table *';
+GO
 
 CREATE TYPE orderidt FROM int NOT NULL;
 GO
@@ -509,6 +510,7 @@ ORDER BY customer_id;
 GO
 
 PRINT '* B2 *';
+GO
 ALTER TABLE customers
 ADD active bit;
 GO
@@ -541,8 +543,7 @@ SELECT customers.customer_id,
 	customers.name,
 	customers.phone,
 	orders.order_id,
-	orders.order_date,
-	orders.shipped_date
+	orders.order_date
 FROM orders
 INNER JOIN customers ON orders.customer_id = customers.customer_id
 WHERE orders.shipped_date IS NULL
@@ -655,6 +656,7 @@ GO
 
 
 PRINT '* C2 - Create employee table PK *';
+GO
 
 ALTER TABLE employee
 ADD PRIMARY KEY (employee_id);
@@ -696,6 +698,7 @@ GO
 UPDATE products
 SET unit_price = unit_price * 1.05
 WHERE unit_price BETWEEN 5 AND 10;
+--WHERE unit_price > 5 AND unit_price < 10; Gives results for c7
 GO
 
 PRINT '* C6 - Update fax value *';
@@ -733,6 +736,18 @@ GO
 --Display the view information
 SELECT * from vw_order_cost;
 GO
+
+SELECT orders.order_id,
+	orders.order_date,
+	products.product_id,
+	customers.name,
+	order_details.quantity * products.unit_price,
+	products.unit_price
+FROM orders
+INNER JOIN order_details ON orders.order_id = order_details.order_id
+INNER JOIN products ON order_details.product_id = products.product_id
+INNER JOIN customers on orders.customer_id = customers.customer_id
+WHERE products.product_id = 3 AND order_details.order_id = 10199;
 
 PRINT '* C8 - view vw_list_employees *';
 GO
