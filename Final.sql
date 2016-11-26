@@ -1,5 +1,7 @@
 -- Switch to master to check and delete database
 USE master;
+GO
+
 -- Check if database exists, if it exists, delete it
 if exists (SELECT * FROM sysdatabases WHERE name='Cus_Orders')
 BEGIN
@@ -17,6 +19,7 @@ GO
 
 --Switch to cus_orders
 USE Cus_Orders;
+GO
 
 -- Create User Defined Data Types
 
@@ -33,9 +36,12 @@ GO
 -- DROP TYPE titleidt;
 
 PRINT '**********';
+GO
 PRINT '* A2 - Creating User Defined Data Types *';
-
+GO
 PRINT '* cusidt User Data Type created for customers table *';
+GO
+
 
 CREATE TYPE cusidt FROM char(5) NOT NULL;
 GO
@@ -46,20 +52,26 @@ CREATE TYPE orderidt FROM int NOT NULL;
 GO
 
 PRINT '* prodidt User Data Type created for products table *';
+GO
 
 CREATE TYPE prodidt FROM int NOT NULL;
 GO
 
 PRINT '* titleidt User Data Type created for titles table *';
+GO
 
 CREATE TYPE titleidt FROM char(3) NOT NULL;
 GO
 
 PRINT '**********';
+GO
+
 PRINT '* A3 - Creating database tables *';
+GO
 
 -- Create customers table
 PRINT '* Create customers table *';
+GO
 
 CREATE TABLE customers
 (
@@ -79,6 +91,7 @@ GO
 
 -- Create orders table
 PRINT '* Create orders table *';
+GO
 
 CREATE TABLE orders
 (
@@ -101,6 +114,7 @@ GO
 
 -- Create order_details table
 PRINT '* Create order_details table *';
+GO
 
 CREATE TABLE order_details
 (
@@ -113,6 +127,7 @@ GO
 
 -- Create products table
 PRINT '* Create products table *';
+GO
 
 CREATE TABLE products
 (
@@ -130,6 +145,7 @@ GO
 
 -- Create shippers table
 PRINT '* Create shippers table *';
+GO
 
 CREATE TABLE shippers
 (
@@ -140,6 +156,7 @@ GO
 
 -- Create suppliers table
 PRINT '* Create suppliers table *';
+GO
 
 CREATE TABLE suppliers
 (
@@ -153,6 +170,8 @@ GO
 
 -- Create titles table
 PRINT '* Create titles table *';
+GO
+
 CREATE TABLE titles
 (
 	title_id titleidt,
@@ -161,9 +180,13 @@ CREATE TABLE titles
 GO
 
 PRINT '**********';
+GO
+
 PRINT '* A4 - Creating tables Primary Keys and Foreign Keys *';
+GO
 
 PRINT '* Add PK to customers *';
+GO
 
 --Create the primary key for the customers table on customer_id
 ALTER TABLE customers
@@ -171,6 +194,7 @@ ADD PRIMARY KEY (customer_id);
 GO
 
 PRINT '* Add PK to shippers *';
+GO
 
 --Create the primary key for the shippers table on shippers_id
 ALTER TABLE shippers
@@ -178,6 +202,7 @@ ADD PRIMARY KEY (shipper_id);
 GO
 
 PRINT '* Add PK to suppliers *';
+GO
 
 --Create the primary key for the suppliers table on supplier_id
 ALTER TABLE suppliers
@@ -185,6 +210,7 @@ ADD PRIMARY KEY (supplier_id);
 GO
 
 PRINT '* Add PK to titles *';
+GO
 
 --Create the primary key for the titles table on title_id
 ALTER TABLE titles
@@ -192,6 +218,7 @@ ADD PRIMARY KEY (title_id);
 GO
 
 PRINT '* Add PK to orders *';
+GO
 
 --Create the primary key on orders table on order_id
 ALTER TABLE orders
@@ -199,6 +226,7 @@ ADD PRIMARY KEY (order_id);
 GO
 
 PRINT '* Add PK to products *';
+GO
 
 --Create the primary key on products table on product_id
 ALTER TABLE products
@@ -206,6 +234,7 @@ ADD PRIMARY KEY (product_id);
 GO
 
 PRINT '* Add PK to order_details *';
+GO
 
 --Create the composite primary key on order_details for (order_id, product_id)
 ALTER TABLE order_details
@@ -213,6 +242,7 @@ ADD PRIMARY KEY (order_id, product_id);
 GO
 
 PRINT '* Add FK to customers *';
+GO
 
 --Create the foreign key for the customers table on title_id
 --References title_id in titles table
@@ -224,6 +254,7 @@ REFERENCES titles
 GO
 
 PRINT '* Add FK to orders *';
+GO
 
 --Create the foreign key for the orders table on customer_id
 --References customer_id in customers table
@@ -235,6 +266,7 @@ REFERENCES customers
 GO
 
 PRINT '* Add FK to orders *';
+GO
 
 --Create the foreign key for the orders table on shippers_id
 --References shipper_id in shippers table
@@ -246,6 +278,7 @@ REFERENCES shippers
 GO
 
 PRINT '* Add FK to order_details *';
+GO
 
 --Create the foreign key for the order_details table on order_id
 --References order_id in orders table
@@ -257,6 +290,7 @@ references orders
 GO
 
 PRINT '* Add FK to order_details *';
+GO
 
 --Create the foreign key for the order_details table on product_id
 --References product in products table
@@ -268,6 +302,7 @@ references products
 GO
 
 PRINT '* Add FK to products *';
+GO
 
 --Create the foreign key for the products table on supplier_id
 --References supplier_id in suppliers table
@@ -279,9 +314,13 @@ REFERENCES suppliers
 GO
 
 PRINT '**********';
+GO
+
 PRINT '* A5 - Adding constraints to tables *';
+GO
 
 PRINT '* default country for customer table *';
+GO
 
 --Set default country for customers to 'Canada'
 ALTER TABLE customers
@@ -290,6 +329,7 @@ DEFAULT('Canada') FOR country;
 Go
 
 PRINT '* default date for orders table *';
+GO
 
 --Set default date to 10 days later for orders required_date
 ALTER TABLE orders
@@ -298,6 +338,7 @@ DEFAULT DATEADD(DAY, 10, GETDATE()) FOR required_date;
 GO
 
 PRINT '* create constraint for quantity on order_details table *';
+GO
 
 --Create constraint, order_details quantity >= 1
 ALTER TABLE order_details
@@ -306,6 +347,7 @@ CHECK(quantity >= 1);
 GO
 
 PRINT '* create constraint for reorder level on products table *';
+GO
 
 --Create constraint products reorder_level >= 1
 ALTER TABLE products
@@ -314,6 +356,7 @@ CHECK (reorder_level >= 1);
 GO
 
 PRINT '* create constraint for quantity on products table *';
+GO
 
 --Create constraint products quantity_in_stock < 150
 ALTER TABLE products
@@ -322,6 +365,7 @@ CHECK (quantity_in_stock < 150);
 GO
 
 PRINT '* default province for suppliers table *';
+GO
 
 --Set default province for suppliers to 'BC'
 ALTER TABLE suppliers
@@ -330,11 +374,17 @@ DEFAULT ('BC') for province;
 GO
 
 USE Cus_Orders;
+GO
 
 PRINT '**********';
+GO
+
 PRINT '* Inserting Values into database *';
+GO
 
 PRINT char(13) + '* Inserting Values into titles table *';
+GO
+
 --insert values into titles
 BULK INSERT titles 
 FROM 'C:\TextFiles\titles.txt' 
@@ -345,8 +395,11 @@ WITH (
 		KEEPNULLS,
 		ROWTERMINATOR = '\n'	            
 	 )
+GO
 
 PRINT char(13) + '* Inserting Values into suppliers table *';
+GO
+
 --insert values into suppliers
 BULK INSERT suppliers 
 FROM 'C:\TextFiles\suppliers.txt' 
@@ -357,8 +410,11 @@ WITH (
 		KEEPNULLS,
 		ROWTERMINATOR = '\n'	            
 	  )
+GO
 
 PRINT char(13) + '* Inserting Values into shippers table *';
+GO
+
 --insert values into shippers
 BULK INSERT shippers 
 FROM 'C:\TextFiles\shippers.txt' 
@@ -369,8 +425,11 @@ WITH (
 		KEEPNULLS,
 		ROWTERMINATOR = '\n'	            
 	  )
+GO
 
 PRINT char(13) + '* Inserting Values into customers table *';
+GO
+
 --insert values into customers
 BULK INSERT customers 
 FROM 'C:\TextFiles\customers.txt' 
@@ -381,8 +440,11 @@ WITH (
 		KEEPNULLS,
 		ROWTERMINATOR = '\n'	            
 	  )
+GO
 
 PRINT char(13) + '* Inserting Values into products table *';
+GO
+
 --insert values into products
 BULK INSERT products 
 FROM 'C:\TextFiles\products.txt' 
@@ -393,8 +455,11 @@ WITH (
 		KEEPNULLS,
 		ROWTERMINATOR = '\n'	            
 	  )
+GO
 
 PRINT char(13) + '* Inserting Values into order_details table *';
+GO
+
 --insert values into order_details
 BULK INSERT order_details 
 FROM 'C:\TextFiles\order_details.txt'  
@@ -405,8 +470,11 @@ WITH (
 		KEEPNULLS,
 		ROWTERMINATOR = '\n'	            
 	  )
+GO
 
 PRINT char(13) + '* Inserting Values into orders table *';
+GO
+
 --insert values into orders
 BULK INSERT orders 
 FROM 'C:\TextFiles\orders.txt' 
@@ -417,15 +485,20 @@ WITH (
 		KEEPNULLS,
 		ROWTERMINATOR = '\n'	            
 	  )
-
-
+GO
 
 USE Cus_Orders;
+GO
 
 PRINT '**********';
+GO
+
 PRINT '* B - SQL Statements *';
+GO
+
 
 PRINT '* B1 *';
+GO
 
 SELECT customer_id,
 	name,
@@ -446,6 +519,7 @@ DEFAULT 1 for active;
 GO
 
 PRINT '* B3 *';
+GO
 
 SELECT orders.order_id,
 	products.name,
@@ -461,6 +535,7 @@ WHERE orders.order_date BETWEEN 'January 1 2001' AND 'December 31 2001';
 GO
 
 PRINT '* B4 *'
+GO
 
 SELECT customers.customer_id,
 	customers.name,
@@ -475,6 +550,7 @@ ORDER BY customers.name;
 GO
 
 PRINT '* B5 *'
+GO
 
 SELECT customers.customer_id,
 	customers.name,
@@ -486,6 +562,7 @@ WHERE customers.region IS NULL;
 GO
 
 PRINT '* B6 *'
+GO
 
 SELECT suppliers.name,
 	products.name,
@@ -498,6 +575,7 @@ ORDER BY suppliers.name;
 GO
 
 PRINT '* B7 *'
+GO
 
 SELECT orders.order_id,
 	customers.name,
@@ -511,6 +589,7 @@ ORDER BY orders.order_id, 'elapsed';
 GO
 
 PRINT '* B8 *'
+GO
 
 SELECT  'name' = SUBSTRING(name, 1, 1),
 	'total' = COUNT(*)
@@ -521,6 +600,7 @@ HAVING COUNT(*) >= 2;
 GO
 
 PRINT '* B9 *'
+GO
 
 SELECT order_details.order_id,
 	order_details.quantity,
@@ -535,6 +615,7 @@ order by order_details.order_id;
 GO
 
 PRINT '* B10 *'
+GO
 
 SELECT products.product_id,
 	products.name,
@@ -547,11 +628,16 @@ ORDER BY products.name;
 GO
 
 USE Cus_Orders;
+GO
 
 PRINT '**********';
+GO
+
 PRINT '* C - INSERT, UPDATE, DELETE and VIEWS STATEMENTS *';
+GO
 
 PRINT '* C1 - Create employee table *';
+GO
 
 CREATE TABLE employee
 (
@@ -575,6 +661,7 @@ ADD PRIMARY KEY (employee_id);
 GO
 
 PRINT '* C3 - Create employee table references and updated data *';
+GO
 
 --Inserting data into employee table
 BULK INSERT employee 
@@ -596,12 +683,14 @@ REFERENCES employee
 GO
 
 PRINT '* C4 - Insert Quick Express *';
+GO
 
 INSERT INTO shippers
 VALUES ('Quick Express');
 GO
 
 PRINT '* C5 - Update products unit price *';
+GO
 
 -- !!! Double check that the between works as expected.
 UPDATE products
@@ -610,6 +699,7 @@ WHERE unit_price BETWEEN 5 AND 10;
 GO
 
 PRINT '* C6 - Update fax value *';
+GO
 
 UPDATE customers
 SET fax = 'Unknown'
@@ -617,6 +707,7 @@ WHERE fax IS NULL;
 Go
 
 PRINT '* C7 - view vw_order_cost *';
+GO
 
 CREATE VIEW vw_order_cost
 (
@@ -644,6 +735,7 @@ SELECT * from vw_order_cost;
 GO
 
 PRINT '* C8 - view vw_list_employees *';
+GO
 
 --create vw_list_employees
 
@@ -663,6 +755,7 @@ WHERE employee_id IN ('5', '7', '9');
 GO
 
 PRINT '* C9 - view vw_list_employees *';
+GO
 
 --Create vw_all_orders
 
@@ -701,6 +794,7 @@ ORDER BY customer_name, country;
 GO
 
 PRINT '* C10 - view vw_supplier_products *';
+GO
 
 -- Create vw_supplier_products view
 
@@ -723,13 +817,19 @@ GO
 --List all the data from vw_supplier_products 
 SELECT *
 FROM vw_supplier_products;
+GO
 
 USE Cus_Orders;
+GO
 
 PRINT '**********';
+GO
+
 PRINT '* D - Stored Procedures and Triggers *';
+GO
 
 PRINT '* D1 - sp_customer_list procedure *';
+GO
 
 --Create sp_customer_city procedure
 
@@ -753,6 +853,7 @@ EXECUTE sp_customer_city 'london';
 GO
 
 PRINT '* D2 - sp_orders_by_dates *';
+GO
 
 --create procedure sp_orders_by_dates
 
@@ -778,6 +879,7 @@ EXECUTE sp_orders_by_dates '2003/01/01', '2003/06/30';
 GO
 
 PRINT '* D3 - sp_product_listing *';
+GO
 
 -- Create the procedure sp_product_listing
 
@@ -807,6 +909,7 @@ EXECUTE sp_product_listing 'Jack', 'June', '2001';
 GO
 
 PRINT '* D4 - tr_delete_orders *';
+GO
 
 --Create a trigger to prevent order deletion
 
@@ -828,6 +931,7 @@ WHERE order_id=10000;
 GO
 
 PRINT '* D5 - tr_check_qty *';
+GO
 
 --Create Trigger tr_check_qty
 
@@ -852,6 +956,7 @@ WHERE order_id='10044'
 GO
 
 PRINT '* D6 - sp_del_inactive_cust *';
+GO
 
 CREATE PROCEDURE sp_del_inactive_cust
 AS
@@ -873,6 +978,7 @@ SELECT * FROM customers WHERE customer_id NOT IN (SELECT customer_id FROM orders
 GO
 
 PRINT '* D7 - sp_employee_information *';
+GO
 
 --Create the stored procedure sp_employee_information
 
@@ -892,6 +998,7 @@ EXECUTE sp_employee_information '5';
 GO
 
 PRINT '* D8 - sp_reorder_qty *';
+GO
 
 -- DROP PROCEDURE sp_reorder_qty;
 
@@ -920,6 +1027,7 @@ EXECUTE sp_reorder_qty 5;
 GO
 
 PRINT '* D9 - sp_unit_price *';
+GO
 
 -- DROP PROCEDURE sp_unit_price;
 
@@ -942,3 +1050,4 @@ GO
 --Execute sp_unit_price for values 5 and 10.
 
 EXECUTE sp_unit_price 5.00, 10.00;
+GO
