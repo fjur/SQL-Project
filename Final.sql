@@ -694,7 +694,6 @@ GO
 PRINT '* C5 - Update products unit price *';
 GO
 
--- !!! Double check that the between works as expected.
 UPDATE products
 SET unit_price = unit_price * 1.05
 WHERE unit_price BETWEEN 5 AND 10;
@@ -711,6 +710,11 @@ Go
 
 PRINT '* C7 - view vw_order_cost *';
 GO
+
+-- The use of between in Part C - 5 produces slightly different results than what is shown in the project description. 
+-- This is due to the project relying on < and > to do the updating which does not affect certain values. 
+-- The conscious decision to use ‘BETWEEN’ was made since the question explicitly used the natural language
+-- word to describe the updating scenario.
 
 CREATE VIEW vw_order_cost
 (
@@ -795,7 +799,6 @@ INNER JOIN customers ON orders.customer_id = customers.customer_id;
 GO
 
 --Run query for vw_all_orders
---!!! Very last query is not the same as the data shown in notes?
 
 SELECT order_id,
 	customer_id,
