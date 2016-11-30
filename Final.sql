@@ -935,7 +935,11 @@ CREATE TRIGGER tr_delete_orders
 ON orders
 INSTEAD OF DELETE
 AS
- IF EXISTS (Select * from deleted INNER JOIN order_details ON deleted.order_id = order_details.order_id)
+ --As Join
+-- IF EXISTS (Select * from deleted INNER JOIN order_details ON deleted.order_id = order_details.order_id)
+--As Subquery
+ IF EXISTS (SELECT * FROM deleted WHERE deleted.order_id IN 
+ (SELECT order_id FROM order_details WHERE order_details.order_id = deleted.order_id))
 	BEGIN
 		PRINT 'Deletion Not Allowed, order exists in order_details table';
 		ROLLBACK TRANSACTION
@@ -957,8 +961,14 @@ CREATE TRIGGER tr_check_qty
 ON order_details
 FOR INSERT, UPDATE
 AS
-	-- IF EXISTS (SELECT quantity FROM inserted INNER JOIN products ON products.product_id = inserted.product_id WHERE products.quantity_in_stock < quantity) --Using Joins
-	IF EXISTS (SELECT quantity FROM inserted WHERE product_id IN (SELECT product_id FROM products WHERE products.quantity_in_stock < quantity))
+ --Using Joins
+	-- IF EXISTS (SELECT quantity 
+	-- FROM inserted INNER JOIN products ON products.product_id = inserted.product_id 
+	-- WHERE products.quantity_in_stock < quantity)
+--Using Subqueries
+IF EXISTS (SELECT * FROM inserted WHERE product_id IN 
+	(SELECT product_id FROM products 
+	WHERE products.product_id = inserted.product_id AND products.quantity_in_stock < quantity))
 		BEGIN
 			PRINT 'Cannot order a higher quantity of a product than we have in stock';
 			ROLLBACK TRANSACTION;
@@ -975,6 +985,7 @@ GO
 
 PRINT '* D6 - sp_del_inactive_cust *';
 GO
+ 
 
 CREATE PROCEDURE sp_del_inactive_cust
 AS
